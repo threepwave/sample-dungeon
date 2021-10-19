@@ -56,24 +56,6 @@ contract Dungeons is ERC721Enumerable, ReentrancyGuard, Ownable {
         uint8 entityType; // 0-255
     }
 
-    /*
-    EntityData[] entitydata1 = [
-        entity1a, entity1b
-    ];
-
-    Entities entities1 = Entities(entitydata1);
-    // Entities entitientities1 = Entities[entity1a, entity1b];
-
-/*
-    EntityData entity2a = EntityData(0, 1, 1);
-    EntityData entity2b = EntityData(0, 1, 1);
-    EntityData entity3a = EntityData(0, 1, 1);
-    EntityData entity3b = EntityData(0, 1, 1);
-    EntityData entity4a = EntityData(0, 1, 1);
-    EntityData entity4b = EntityData(0, 1, 1);
-*/
-  
-
     event Debug(string output);
     
     /**

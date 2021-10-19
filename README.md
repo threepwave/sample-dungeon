@@ -3,6 +3,8 @@ Sample dungeons based on Dungeon Maps project.
 
 # Working with the contract (on Rinkeby testnet)
 
+Contract Address: https://rinkeby.etherscan.io/address/0xB14Cf44b866c2dd36aFfD9577962CA8755e973F8#readContract
+
 ## Input
 TokenId can be between 1 and 4.
 

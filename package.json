@@ -1,12 +1,15 @@
 {
   "scripts": {
-    "build": "npx hardhat compile; node build.js",
+    "build": "npx hardhat compile; node ./scripts/build.js",
     "watch": "watch 'npm run build' ./contracts",
     "compile": "npx hardhat compile",
-    "test": "npx hardhat test"
+    "deploy": "npx hardhat run scripts/deploy.js --network rinkeby",
+    "test": "npx hardhat test",
+    "query": "npx hardhat run scripts/query.js --network rinkeby"
   },
   "author": "threepwave",
   "dependencies": {
+    "@nomiclabs/hardhat-etherscan": "^2.1.6",
     "dotenv": "^10.0.0",
     "watch": "^1.0.2"
   },
