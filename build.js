@@ -6,8 +6,13 @@ async function main() {
     const Dungeons = await ethers.getContractFactory("Dungeons");
     const dungeon = await Dungeons.deploy();
     await dungeon.deployed();
-  
-    console.log(`Seed: ${await dungeon.getSeed(1)}`)
+    
+    const tokenId = 1
+    console.log(`Seed: ${await dungeon.getSeed(tokenId)}`)
+    console.log(`Size: ${await dungeon.getSize(tokenId)}`)
+    console.log(`Layout: ${await dungeon.getLayout(tokenId)}`)
+    console.log(`Entities: ${await dungeon.getEntities(tokenId)}`)
+
 }
 
 main()

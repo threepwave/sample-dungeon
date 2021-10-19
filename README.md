@@ -1,5 +1,104 @@
-# solidity-boilerplate
-Simple solidity contract start project using hardhat
+# sample-dungeon
+Sample dungeons based on Dungeon Maps project.
+
+# Working with the contract (on Rinkeby testnet)
+
+## Input
+TokenId can be between 1 and 4.
+
+getLayout(tokenId) - Returns a uint256 w/ each digit representing a tile in a square array (left to right)
+
+## Expected Output
+Each tokenId's expected output (once you parse the array) is listed below
+```
+    1: 0x000000000000000ffffffffe0ff03fc0ffbfc0ff03fc0ff03fffffffffffffff (14x14)
+        1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 1 0 0 0 0 0 0 1 1 
+        1 1 1 1 1 1 0 0 0 0 0 0 1 1 
+        1 1 1 1 1 1 0 0 0 0 0 0 1 1 
+        1 1 1 1 1 1 0 0 0 0 0 0 1 1 
+        1 1 1 1 1 1 0 1 1 1 1 1 1 1 
+        1 1 0 0 0 0 0 0 1 1 1 1 1 1 
+        1 1 0 0 0 0 0 0 1 1 1 1 1 1 
+        1 1 0 0 0 0 0 1 1 1 1 1 1 1 
+        1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 1 1 1 1 1 1 1 1 1
+
+    2: 0x0000000000000000000001ffffffe3ff1ff8c3c61f70ff2ff97fcffe7ff3ffff (13x13)
+        1 1 1 1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 0 0 1 1 1 1 1 1 
+        1 1 1 1 1 0 0 1 1 1 1 1 1 
+        1 1 1 1 1 0 0 1 1 1 1 1 1 
+        1 1 1 0 1 0 0 1 1 1 1 1 1 
+        1 1 1 0 1 0 0 1 1 1 1 1 1 
+        1 1 0 0 0 0 1 1 1 0 1 1 1 
+        1 1 0 0 0 0 1 1 0 0 0 1 1 
+        1 1 0 0 0 0 1 1 0 0 0 1 1 
+        1 1 1 1 1 1 1 1 0 0 0 1 1 
+        1 1 1 1 1 1 1 1 0 0 0 1 1 
+        1 1 1 1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 1 1 1 1 1 1 1 1
+
+    3: 0x000000000000000000000000000000000000000fffffc7f03c0f03f7ffffffff (10x10)
+        1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 0 1 1 1 1 
+        1 1 0 0 0 0 0 0 1 1 
+        1 1 0 0 0 0 0 0 1 1 
+        1 1 0 0 0 0 0 0 1 1 
+        1 1 1 1 1 0 0 0 1 1 
+        1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 1 1 1 1 1
+
+    4: 0x00000001fffffffe007c00f801fb03f607e80fd03fe07fc0ffffffffffffffff (15x15)
+        1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 0 0 0 0 0 0 1 1 1 1 1 
+        1 1 1 1 0 0 0 0 0 0 1 1 1 1 1 
+        1 1 1 1 0 0 0 0 0 0 1 0 1 1 1 
+        1 1 1 0 0 0 0 0 0 0 1 0 1 1 1 
+        1 1 1 0 0 0 0 0 0 1 1 0 1 1 1 
+        1 1 1 0 0 0 0 0 0 1 1 0 1 1 1 
+        1 1 1 0 0 0 0 0 0 0 0 0 0 1 1 
+        1 1 1 0 0 0 0 0 0 0 0 0 0 1 1 
+        1 1 1 0 0 0 0 0 0 0 0 0 0 1 1 
+        1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+        1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+```
+
+## How to parse / use
+
+getLayout() returns a uint256 which is a 256-bit hexadecimal that is unsigned (always positive).
+
+Each bit (from left to right) represents a dungeon tile.
+
+To parse, you would do something like this (Javascript), depending on your language:
+``` 
+    let counter = 0;
+    let dungeon = []
+    for(let y = 0; y < size; y++) {
+        let row = [];
+        for(let x = 0; x < size; x++) {
+            const tile = layout >> counter & 1; // Step through each bit and read a 0 or a 1
+            row.push(tile);
+            counter++;
+        }
+        dungeon.push(row);
+    }
+```
+
+This would give you a 2D array with each row representing the `y` value and each columen representing the `x` value.
+
+Walls would be represented by 1's and walkable tiles by 0. (Note: at some point, I'll probably flip these to save memory)
+
+
+# Building/Deploying the contract
 
 ## Installation
 1. Install dependencies: `npm install`

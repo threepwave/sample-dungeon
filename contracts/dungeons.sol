@@ -32,9 +32,69 @@ contract Dungeons is ERC721Enumerable, ReentrancyGuard, Ownable {
         98310284901289048901820948190
     ];    // We'll bitshift this seed to get pseudorandom numbers
 
+    uint8[] private size = [
+        14,
+        13,
+        10,
+        15
+    ];
+
+    uint256[] private layout = [
+        100433627763354881540869006809100674666560101711422219616255,
+        748288835873980503392335818341100997436436569653247,
+        1267650335484886137747831521279,
+        53919893321758953321466092165956368018174615290879040481415776960511  
+    ];
+
+    struct Entities {
+        EntityData[] entities;
+    }
+
+    struct EntityData {
+        uint8 x;
+        uint8 y;
+        uint8 entityType; // 0-255
+    }
+
+    /*
+    EntityData[] entitydata1 = [
+        entity1a, entity1b
+    ];
+
+    Entities entities1 = Entities(entitydata1);
+    // Entities entitientities1 = Entities[entity1a, entity1b];
+
+/*
+    EntityData entity2a = EntityData(0, 1, 1);
+    EntityData entity2b = EntityData(0, 1, 1);
+    EntityData entity3a = EntityData(0, 1, 1);
+    EntityData entity3b = EntityData(0, 1, 1);
+    EntityData entity4a = EntityData(0, 1, 1);
+    EntityData entity4b = EntityData(0, 1, 1);
+*/
+  
+
     event Debug(string output);
     
+    /**
+    * @dev Returns the entire structure of a dungeon (size, layout, points)
+    */
     function tokenURI(uint256 tokenId) override(ERC721) public view returns (string memory) {
+        /* Returns 
+        {
+            size: 8,
+            layout: 0x1934104014214,
+            entities: [{
+                x: 4,
+                y: 13,
+                type: 0
+            },{
+                x: 2,
+                y: 3,
+                type: 1
+            }]
+        } */
+        
         return('test'); // TODO: Replace w/ proper tokenURI
     }
 
@@ -53,6 +113,76 @@ contract Dungeons is ERC721Enumerable, ReentrancyGuard, Ownable {
         require(tokenId > 0 && tokenId < 5, "Token ID must be between 1->4");
         return seeds[tokenId-1];
     }
+
+    /** 
+    * @dev Returns the size of a dungeon e.g. '8' for and 8x8 dungeon (currently a single uint8)
+    */
+    function getSize(uint256 tokenId) public view returns (uint8) {
+        require(tokenId > 0 && tokenId < 5, "Token ID must be between 1->4");
+        return size[tokenId-1];
+    }
+
+    /** 
+    * @dev Returns the size of a dungeon e.g. '8' for and 8x8 dungeon (currently a single uint8)
+    */
+    function getLayout(uint256 tokenId) public view returns (bytes32) {
+        require(tokenId > 0 && tokenId < 5, "Token ID must be between 1->4");
+        return bytes32(layout[tokenId-1]);
+    }
+
+    /** 
+    * @dev Returns each entity in a dungeon. There can be at most 32 entities and each has an (x, y) coordinate and a type (0-254)
+    */
+    function getEntities(uint256 tokenId) public pure returns (uint8[] memory, uint8[] memory, uint8[] memory) {
+    // function getEntities(uint256 tokenId) public view returns (string memory) {
+        require(tokenId > 0 && tokenId < 5, "Token ID must be between 1->4");
+        Entities[] memory entities = new Entities[](4);
+        entities = setupEntities();
+
+        /* Traverse the array and grab the one they requested */
+        uint256 length = 2;
+        uint8[] memory x = new uint8[](length);
+        uint8[] memory y = new uint8[](length);
+        uint8[] memory types = new uint8[](length);
+
+        for(uint8 i = 0; i < length; i++) {
+            EntityData[] memory currentEntity = entities[tokenId-1].entities;
+            x[i] = currentEntity[i].x;
+            y[i] = currentEntity[i].y;
+            types[i] = currentEntity[i].entityType;
+        }
+        return (x, y, types);
+    }
+
+    function setupEntities() internal pure returns (Entities[] memory) {
+ /* Hardcode individual EntityData per map (solidity won't do this at global scope level so needs to be here)*/
+        // Create the initial array of entities (1 array per map)
+        EntityData[] memory entityData1 = new EntityData[](2);
+        EntityData[] memory entityData2 = new EntityData[](2);
+        EntityData[] memory entityData3 = new EntityData[](2);
+        EntityData[] memory entityData4 = new EntityData[](2);
+
+        // Populate our array for each map
+        entityData1[0] = EntityData(7, 5, 1);
+        entityData1[1] = EntityData(6, 8, 0);
+        entityData2[0] = EntityData(3, 5, 0);
+        entityData2[1] = EntityData(6, 1, 1);
+        entityData3[0] = EntityData(5, 1, 1);
+        entityData3[1] = EntityData(3, 2, 0); 
+        entityData4[0] = EntityData(5, 1, 1);
+        entityData4[1] = EntityData(3, 2, 0); 
+
+        // Create an array to house map0's entity struct
+        Entities[] memory entities = new Entities[](4);
+        entities[0] = Entities(entityData1);
+        entities[1] = Entities(entityData2);
+        entities[2] = Entities(entityData3);
+        entities[3] = Entities(entityData4);
+
+        return(entities);
+    }
+
+    
 
     constructor() ERC721("Dungeons", "DUNGEONS") Ownable() { 
     }

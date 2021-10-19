@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/threepwave/code/sample-dungeon/contracts/dungeons.sol": {
-      "lastModificationDate": 1634664554319,
-      "contentHash": "68e20bcb0ea200a23ae6eca7d8b08841",
+      "lastModificationDate": 1634672170612,
+      "contentHash": "0a117d02720f67a557e14775f5009aa9",
       "sourceName": "contracts/dungeons.sol",
       "solcConfig": {
         "version": "0.8.0",
