@@ -5,6 +5,8 @@ Sample dungeons based on Dungeon Maps project.
 
 Contract Address: https://rinkeby.etherscan.io/address/0xB14Cf44b866c2dd36aFfD9577962CA8755e973F8#readContract
 
+**You can query the contract and pull down sample data by running `npm run query` (which executes `./scripts/query.js`)**
+
 ## Input
 TokenId can be between 1 and 4.
 
@@ -76,22 +78,28 @@ Each tokenId's expected output (once you parse the array) is listed below
 
 ## How to parse / use
 
+Note: You can find full parsing sample code (Javascript) in `/scripts/query.js`
+
 getLayout() returns a uint256 which is a 256-bit hexadecimal that is unsigned (always positive).
 
 Each bit (from left to right) represents a dungeon tile.
 
 To parse, you would do something like this (Javascript), depending on your language:
 ``` 
+    layoutInt = BigInt(layout)           // Process uint256 -> javascript readable int
+    const bits = layoutInt.toString(2);  // Convert BigInt to binary
+
+    let dungeon = [];   // Array to store our dungeon coordinates
+
     let counter = 0;
-    let dungeon = []
     for(let y = 0; y < size; y++) {
-        let row = [];
+        let row = []
         for(let x = 0; x < size; x++) {
-            const tile = layout >> counter & 1; // Step through each bit and read a 0 or a 1
-            row.push(tile);
-            counter++;
+            const bit = bits[counter];
+            row.push(bit)
+            counter++
         }
-        dungeon.push(row);
+        dungeon.push(row)
     }
 ```
 
@@ -106,7 +114,7 @@ Walls would be represented by 1's and walkable tiles by 0. (Note: at some point,
 1. Install dependencies: `npm install`
 
 ## Usage
-Query contract's `getSeed()` function once (and console.log the output) - `npm run build`.
+Query local contract's `getSeed()` function once (and console.log the output) - `npm run build`.
 
 Watch for changes to the contract and re-compile/deploy if we make changes - `npm run dev` (Note: changes to build.js will not trigger a re-compile/deploy)
 
